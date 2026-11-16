@@ -54,7 +54,7 @@ function loginTest(string $email,string $session): void {
     [$code]=http('login.php',['csrf'=>token($body),'usuario'=>$email,'senha'=>'123456'],$session); check($code===302,'Login succeeds ('.$session.')');
 }
 [$code]=http('home.php',null,'anonymous');check($code===302,'Anonymous users redirected');
-loginTest('admin@epicontrol.com','admin'); loginTest('joaoteste@gmail.com','employee');
+loginTest('admin@epicontrol.com','admin'); loginTest('joaoteste@example.test.','employee');
 check(password_verify('123456',$m->user(2)['senha']),'Authenticated password is stored as a valid hash');
 foreach(['home','cadastro','funcionarios','relatorios','estoque','pedidos','fazerpedidos','compras','movimentacoes','andamento','perfil','informacoes.php?id=2','editarfunc.php?id=2','adicionarepi.php?id=2','excluirfunc.php?id=2'] as $route) {
     $path=str_contains($route,'.php')?$route:$route.'.php'; [$code,$body]=http($path); check($code===200 && !str_contains($body,'Fatal error'),'Admin page '.$path);
@@ -94,11 +94,11 @@ check($code===200 && str_contains($body,'já foi alterado'),'Repeated inactivati
 check($code===302,'Existing session is revoked for inactive employee');
 [$code,$body]=http('login.php',null,'employee');
 check($code===200 && str_contains($body,'Sua conta está inativa'),'Inactive session explains access denial');
-[$code,$body]=http('login.php',['csrf'=>token($body),'usuario'=>'joaoteste@gmail.com','senha'=>'123456'],'employee');
+[$code,$body]=http('login.php',['csrf'=>token($body),'usuario'=>'joaoteste@example.test.','senha'=>'123456'],'employee');
 check($code===200 && str_contains($body,'Sua conta está inativa'),'Inactive employee cannot sign in');
 [$code]=http('funcionarios.php',['csrf'=>$csrf,'id_funcionario'=>2,'status'=>'Ativo']);
 check($code===302 && $m->user(2)['status_funcionario']==='Ativo','Administrator reactivates employee');
-loginTest('joaoteste@gmail.com','employee');
+loginTest('joaoteste@example.test.','employee');
 [$code]=http('excluirfunc.php?id='.$created['id_funcionario'],['csrf'=>$csrf,'id_funcionario'=>$created['id_funcionario']]);check($code===302 && !$m->user((int)$created['id_funcionario']),'Admin deletes employee without history');
 // Leave the disposable preview in a useful state after exercising edge cases.
 $m->run("UPDATE tb_funcionarios SET foto_url='img/boy.png' WHERE id_funcionario=2");
