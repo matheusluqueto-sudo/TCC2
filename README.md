@@ -126,7 +126,9 @@ O banco de dados do EPI Control utiliza MySQL e possui oito tabelas principais e
 - `tb_entrada`
 - `tb_saida`
 - `if_solicitacao`
+- `recuperacao_senha`
 
+A recuperação de senha é realizada pelo administrador por meio da edição do cadastro do funcionário. A tabela recuperacao_senha permanece na estrutura do banco de dados, mas não é utilizada na versão atual.
 O arquivo `database/tcc.sql` contém a estrutura do banco de dados, incluindo relacionamentos, índices e a coluna `status_funcionario`.
 
 Os registros incluídos no SQL são fictícios e mínimos, destinados a demonstrações locais e testes. Eles não comprovam a exigência acadêmica de 20 registros por tabela.
